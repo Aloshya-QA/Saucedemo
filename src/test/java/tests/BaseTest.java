@@ -1,14 +1,20 @@
+package tests;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import pages.LoginPage;
+import pages.ProductsPage;
 
 import java.time.Duration;
 import java.util.HashMap;
 
 public class BaseTest {
     WebDriver driver;
+    LoginPage loginPage;
+    ProductsPage productsPage;
 
     @BeforeMethod
     public void setup() {
@@ -25,6 +31,8 @@ public class BaseTest {
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10L));
         driver.manage().window().maximize();
+        loginPage = new LoginPage(driver);
+        productsPage = new ProductsPage(driver);
     }
 
     @AfterMethod(alwaysRun = true)
