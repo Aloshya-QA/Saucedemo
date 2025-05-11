@@ -59,7 +59,7 @@ public class CartPage extends BasePage implements NavigationModule {
 
     @Override
     public boolean isVisibleBurgerMenu() {
-        return driver.findElement(BURGER_MENU).isDisplayed();
+        return Boolean.parseBoolean(driver.findElement(BURGER_MENU).getDomAttribute("hidden"));
     }
 
     public String getTitle() {

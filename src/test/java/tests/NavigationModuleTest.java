@@ -27,9 +27,11 @@ public class NavigationModuleTest extends BaseTest{
         loginPage.login("standard_user", "secret_sauce");
         cartPage.openCart();
         cartPage.openBurgerMenu();
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(NavigationModule.BURGER_MENU)));
+        wait.until(ExpectedConditions.attributeContains(
+                NavigationModule.BURGER_MENU, "aria-hidden", "false"));
         cartPage.closeBurgerMenu();
-        wait.until(ExpectedConditions.invisibilityOf(driver.findElement(NavigationModule.BURGER_MENU)));
+        wait.until(ExpectedConditions.attributeContains(
+                NavigationModule.BURGER_MENU, "aria-hidden", "true"));
         assertFalse(cartPage.isVisibleBurgerMenu());
     }
 
