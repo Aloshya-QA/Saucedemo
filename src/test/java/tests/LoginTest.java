@@ -6,14 +6,14 @@ import static org.testng.Assert.assertEquals;
 
 public class LoginTest extends BaseTest {
 
-    @Test
+    @Test(testName = "Проверка валидного логина", groups = {"Smoke"})
     public void checkSuccessLogin() {
         loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login("standard_use", "secret_sauce");
         assertEquals(productsPage.getTitle(), "Products", "Not login");
     }
 
-    @Test
+    @Test(testName = "Проверка логина с пустым паролем", groups = {"Regression"})
     public void checkLoginWithEmptyPassword() {
         loginPage.open();
         loginPage.login("standard_user", "");
@@ -22,7 +22,7 @@ public class LoginTest extends BaseTest {
                 "SO BAD");
     }
 
-    @Test
+    @Test(testName = "Проверка логина с неверным паролем", groups = {"Regression"})
     public void checkLoginWithWrongPassword() {
         loginPage.open();
         loginPage.login("standard_user", "12314567");
@@ -30,7 +30,7 @@ public class LoginTest extends BaseTest {
                 "Epic sadface: Username and password do not match any user in this service",
                 "SO BAD");
     }
-    @Test
+    @Test(testName = "Проверка логина с неверным юзером", groups = {"Regression"})
     public void checkLoginWithWrongUsername() {
         loginPage.open();
         loginPage.login("standard", "secret_sauce");

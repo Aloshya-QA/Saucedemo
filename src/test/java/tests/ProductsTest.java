@@ -6,7 +6,7 @@ import static org.testng.Assert.assertEquals;
 
 public class ProductsTest extends BaseTest{
 
-    @Test
+    @Test(testName = "Проверка сортировки товара по имени", groups = {"Regression"})
     public void sortProductsNameByReverseOrder() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
@@ -15,7 +15,7 @@ public class ProductsTest extends BaseTest{
         assertEquals(productsPage.getListProductsName(), productsPage.getListProductsNameDESC());
     }
 
-    @Test
+    @Test(testName = "Проверка сортировки товара по возрастанию стоимости", groups = {"Regression"})
     public void sortProductsPriceByLowToHigh() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
@@ -24,7 +24,7 @@ public class ProductsTest extends BaseTest{
         assertEquals(productsPage.getListProductsPrice(), productsPage.getListProductsPriceASC());
     }
 
-    @Test
+    @Test(testName = "Проверка сортировки товара по убыванию стоимости", groups = {"Regression"})
     public void sortProductsPriceByHighToLow() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");

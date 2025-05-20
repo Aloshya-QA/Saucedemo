@@ -1,12 +1,13 @@
 package tests;
 
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import static org.testng.Assert.*;
 
 public class CartTest extends BaseTest {
 
-    @Test
+    @Test(testName = "Проверка добавления товара в корзину", groups = {"Smoke"})
     public void checkAddedProducts() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
@@ -15,7 +16,7 @@ public class CartTest extends BaseTest {
         assertEquals(cartPage.getProductsName(0), "Sauce Labs Backpack");
     }
 
-    @Test
+    @Test(testName = "Проверка стоимости товара в корзине", groups = {"Regression"})
     public void checkAddedProductsPrice() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
@@ -24,18 +25,20 @@ public class CartTest extends BaseTest {
         assertEquals(cartPage.getProductPrice(0), 29.99);
     }
 
-    @Test
+    @Test(testName = "Проверка удаления товара из корзины", groups = {"Regression"})
     public void checkRemoveProducts() {
+        SoftAssert softAssert = new SoftAssert();
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
         productsPage.addProduct("Sauce Labs Backpack", "Sauce Labs Bike Light");
         cartPage.openCart();
-        assertEquals(cartPage.getCountOfProducts(), 2);
+        softAssert.assertEquals(cartPage.getCountOfProducts(), 2);
         cartPage.removeProduct("Sauce Labs Backpack");
-        assertEquals(cartPage.getCountOfProducts(), 1);
+        softAssert.assertEquals(cartPage.getCountOfProducts(), 1);
+        softAssert.assertAll();
     }
 
-    @Test
+    @Test(testName = "Проверка кол-ва добавленных товаров в корзину", groups = {"Regression"})
     public void checkNumberAddedProducts() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
@@ -44,7 +47,7 @@ public class CartTest extends BaseTest {
         assertEquals(cartPage.getCountOfProducts(), 2);
     }
 
-    @Test
+    @Test(testName = "Проверка кнопки 'Continue Shopping'", groups = {"Regression"})
     public void checkContinueShoppingButton() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
@@ -53,7 +56,7 @@ public class CartTest extends BaseTest {
         assertEquals(productsPage.getTitle(), "Products");
     }
 
-    @Test
+    @Test(testName = "Проверка кнопки 'Checkout'", groups = {"Smoke"})
     public void verifyCheckoutButton() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");

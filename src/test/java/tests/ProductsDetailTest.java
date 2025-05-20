@@ -7,7 +7,8 @@ import static org.testng.Assert.assertTrue;
 
 public class ProductsDetailTest extends BaseTest {
 
-    @Test
+    @Test(testName = "Проверка открытия старницы подробного описания товара",
+            groups = {"Regression"})
     public void checkOpenProductDetailPageSuccess() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
@@ -15,7 +16,7 @@ public class ProductsDetailTest extends BaseTest {
         assertTrue(productsDetailPage.isVisibleDetailsForm());
     }
 
-    @Test
+    @Test(testName = "Проверка кнопки добавления товара", groups = {"Regression"})
     public void checkAddToCartButtonFromDetailsPage() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
@@ -25,7 +26,8 @@ public class ProductsDetailTest extends BaseTest {
         assertEquals(cartPage.getProductsName(0), "Test.allTheThings() T-Shirt (Red)");
     }
 
-    @Test void checkRemoveButtonFromDetailsPage() {
+    @Test(testName = "Проверка кнопки удаления товара", groups = {"Regression"})
+    public void checkRemoveButtonFromDetailsPage() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
         productsDetailPage.open("Test.allTheThings() T-Shirt (Red)");
