@@ -56,11 +56,6 @@ public class ProductsPage extends BasePage implements NavigationModule{
         driver.findElement(BURGER_RESET_BUTTON).click();
     }
 
-    @Override
-    public boolean isVisibleBurgerMenu() {
-        return driver.findElement(BURGER_MENU).isDisplayed();
-    }
-
     public String getTitle() {
         return driver.findElement(TITLE).getText();
     }

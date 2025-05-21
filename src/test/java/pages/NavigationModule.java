@@ -21,5 +21,4 @@ public interface NavigationModule {
     void clickAllItemsFromBurgerMenu();
     void clickAboutFromBurgerMenu();
     void clickResetFromBurgerMenu();
-    boolean isVisibleBurgerMenu();
 }
