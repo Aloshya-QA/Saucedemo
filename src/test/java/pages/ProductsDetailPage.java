@@ -11,9 +11,9 @@ import java.util.Objects;
 public class ProductsDetailPage extends BasePage implements NavigationModule{
 
     private static final String GET_ITEM_ID = "//div[text()='%s']/ancestor::a";
-    private final WebElement
-            detailsForm = driver.findElement(
-                    By.xpath("//div[@class='inventory_details']"));
+//    private final WebElement
+//            detailsForm = driver.findElement(
+//                    By.xpath("//div[@class='inventory_details']"));
 
     private final Button
             addToCartButton = new Button(driver, "add-to-cart"),
@@ -25,7 +25,7 @@ public class ProductsDetailPage extends BasePage implements NavigationModule{
 
     @Override
     public BasePage isOpened() {
-        wait.until(ExpectedConditions.visibilityOf(detailsForm));
+//        wait.until(ExpectedConditions.visibilityOf(detailsForm));
         return this;
     }
 

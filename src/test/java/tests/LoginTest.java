@@ -2,8 +2,11 @@ package tests;
 
 import io.qameta.allure.*;
 import org.testng.annotations.Test;
+import pages.ProductsPage;
 
 import static org.testng.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
+import static org.testng.Assert.assertTrue;
 
 public class LoginTest extends BaseTest {
 
@@ -21,7 +24,8 @@ public class LoginTest extends BaseTest {
     @Issue("TMS")
     public void checkSuccessLogin() {
         loginStep.auth("standard_user", "secret_sauce");
-        assertEquals(productsPage.getTitle(), "Products", "Not login");
+        assertThat(productsPage.getTitle())
+                .isEqualTo("Products");
     }
 
     @Test(testName = "Проверка логина с пустым паролем", groups = {"Regression"})

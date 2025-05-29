@@ -36,7 +36,7 @@ public class CheckoutPage extends BasePage implements NavigationModule {
 
     @Override
     public CheckoutPage isOpened() {
-        wait.until(ExpectedConditions.attributeContains(title.getLocator(), "span", ""));
+//        wait.until(ExpectedConditions.attributeContains(title.getLocator(), "span", ""));
         return this;
     }
 

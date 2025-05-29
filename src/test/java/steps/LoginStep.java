@@ -8,7 +8,6 @@ import pages.ProductsPage;
 
 public class LoginStep {
 
-    private static final Logger log = LoggerFactory.getLogger(LoginStep.class);
     WebDriver driver;
     LoginPage loginPage;
     ProductsPage productsPage;

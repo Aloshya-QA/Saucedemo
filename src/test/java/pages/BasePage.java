@@ -13,8 +13,6 @@ public abstract class BasePage {
     WebDriverWait wait;
 
     public static final String BASE_URL = "https://www.saucedemo.com/";
-    public final Text
-            title = new Text(driver, "title");
 
     public BasePage(WebDriver driver) {
         this.driver = driver;

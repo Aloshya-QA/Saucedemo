@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import wrappers.Text;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,8 +19,14 @@ public class ProductsPage extends BasePage implements NavigationModule{
             PRODUCTS_PRICE = By.cssSelector(".inventory_item_price"),
             SORT_OPTIONS_BUTTON = By.cssSelector(".product_sort_container");
 
+    private final Text title = new Text(driver, "title");
+
     public ProductsPage(WebDriver driver) {
         super(driver);
+    }
+
+    public String getTitle() {
+        return title.getText();
     }
 
     public ProductsPage open() {
@@ -29,10 +36,11 @@ public class ProductsPage extends BasePage implements NavigationModule{
 
     @Override
     public ProductsPage isOpened() {
-        wait.until(ExpectedConditions.attributeContains(
-                title.getLocator(),
-                "span",
-                "Products"));
+//        wait.until(ExpectedConditions.attributeContains(
+//                title.getLocator(),
+//                "textContent",
+//                "Products"));
+        wait.until(ExpectedConditions.visibilityOf(title.getLocator()));
         return this;
     }
 
