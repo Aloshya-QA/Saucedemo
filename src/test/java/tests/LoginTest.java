@@ -21,7 +21,7 @@ public class LoginTest extends BaseTest {
     @Issue("TMS")
     public void checkSuccessLogin() {
         loginPage.open();
-        loginPage.login("standard_use", "secret_sauce");
+        loginPage.login("standard_user", "secret_sauce");
         assertEquals(productsPage.getTitle(), "Products", "Not login");
     }
 

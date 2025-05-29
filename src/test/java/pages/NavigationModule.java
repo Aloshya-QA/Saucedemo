@@ -14,11 +14,11 @@ public interface NavigationModule {
     By BURGER_MENU = By.xpath("//div[@class='bm-menu-wrap']");
     By CART_MENU_BUTTON = By.className("shopping_cart_link");
 
-    void openCart();
-    void openBurgerMenu();
-    void closeBurgerMenu();
-    void clickLogoutFromBurgerMenu();
-    void clickAllItemsFromBurgerMenu();
-    void clickAboutFromBurgerMenu();
-    void clickResetFromBurgerMenu();
+//    void openCart();
+//    void openBurgerMenu();
+//    void closeBurgerMenu();
+//    void clickLogoutFromBurgerMenu();
+//    void clickAllItemsFromBurgerMenu();
+//    void clickAboutFromBurgerMenu();
+//    void clickResetFromBurgerMenu();
 }

@@ -2,33 +2,47 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import wrappers.Button;
+import wrappers.Input;
+import wrappers.Text;
 
 public class LoginPage extends BasePage {
-
-    private static final By USER_NAME_FIELD = By.id("user-name"),
-            PASSWORD_FIELD = By.id("password"),
-            LOGIN_BUTTON = By.id("login-button"),
-            ERROR_MESSAGE = By.xpath("//h3[@data-test='error']");
 
     public LoginPage(WebDriver driver) {
         super(driver);
     }
 
-    public void open() {
+    private final Input
+            userNameField = new Input(driver, "user-name"),
+            passwordField = new Input(driver, "password");
+
+    private final Button
+            loginButton = new Button(driver, "login-button");
+
+    private final Text
+            errorMessage = new Text(driver, "error");
+
+    public LoginPage open() {
         driver.get(BASE_URL);
+        return this;
     }
 
-    public void login(String user, String password) {
-        driver.findElement(USER_NAME_FIELD).sendKeys(user);
-        driver.findElement(PASSWORD_FIELD).sendKeys(password);
-        driver.findElement(LOGIN_BUTTON).click();
+    @Override
+    public LoginPage isOpened() {
+        wait.until(ExpectedConditions.visibilityOf(loginButton.getLocator()));
+        return this;
     }
 
-    public boolean isLoginButtonVisible() {
-        return driver.findElement(LOGIN_BUTTON).isDisplayed();
+    public ProductsPage login(String user, String password) {
+        userNameField.fill(user);
+        passwordField.fill(password);
+        loginButton.click();
+        return new ProductsPage(driver);
     }
 
     public String getErrorMessage() {
-        return driver.findElement(ERROR_MESSAGE).getText();
+        return errorMessage.getText();
     }
 }

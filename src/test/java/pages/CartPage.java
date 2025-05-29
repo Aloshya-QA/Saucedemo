@@ -3,58 +3,39 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import wrappers.Button;
+import wrappers.Text;
 
 import java.util.List;
 
 public class CartPage extends BasePage implements NavigationModule {
 
-    private static final String REMOVE_BUTTON = "//div[text() = '%s']/ancestor::div[@class = 'cart_item']//button";
-    private static final By PRODUCTS_NAME = By.xpath(
-            "//div[@class= 'cart_item']/descendant::div[@class = 'inventory_item_name']");
-    private static final By PRODUCTS_PRICE = By.xpath(
+    private static final String
+            REMOVE_BUTTON = "//div[text() = '%s']/ancestor::div[@class = 'cart_item']//button";
+    private static final By
+            PRODUCTS_NAME = By.xpath(
+            "//div[@class= 'cart_item']/descendant::div[@class = 'inventory_item_name']"),
+            PRODUCTS_PRICE = By.xpath(
             "//div[@class= 'cart_item']/descendant::div[@class = 'inventory_item_price']");
-    private static final By CONTINUE_SHOPPING_BUTTON = By.xpath(
-            "//div[@class = 'cart_footer']/button[@id = 'continue-shopping']");
-    private static final By CHECKOUT_BUTTON = By.xpath(
-            "//div[@class = 'cart_footer']/button[@id = 'checkout']");
 
     public CartPage(WebDriver driver) {
         super(driver);
     }
 
-    @Override
-    public void openCart() {
-        driver.findElement(CART_MENU_BUTTON).click();
+    private final Button
+            continueShoppingButton = new Button(driver, "continue-shopping"),
+            checkoutButton = new Button(driver, "checkout");
+
+    public CartPage open() {
+        driver.get(BASE_URL + "cart.html");
+        return this;
     }
 
     @Override
-    public void openBurgerMenu() {
-        driver.findElement(BURGER_MENU_BUTTON).click();
-    }
-
-    @Override
-    public void closeBurgerMenu() {
-        driver.findElement(BURGER_CLOSE_BUTTON).click();
-    }
-
-    @Override
-    public void clickLogoutFromBurgerMenu() {
-        driver.findElement(BURGER_LOGOUT_BUTTON).click();
-    }
-
-    @Override
-    public void clickAllItemsFromBurgerMenu() {
-        driver.findElement(BURGER_ALL_ITEMS_BUTTON).click();
-    }
-
-    @Override
-    public void clickAboutFromBurgerMenu() {
-        driver.findElement(BURGER_ABOUT_BUTTON).click();
-    }
-
-    @Override
-    public void clickResetFromBurgerMenu() {
-        driver.findElement(BURGER_RESET_BUTTON).click();
+    public CartPage isOpened() {
+        wait.until(ExpectedConditions.visibilityOf(checkoutButton.getLocator()));
+        return this;
     }
 
     public WebElement buttonCloseBurgerMenu() {
@@ -70,11 +51,11 @@ public class CartPage extends BasePage implements NavigationModule {
     }
 
     public void clickContinueShoppingButton() {
-        driver.findElement(CONTINUE_SHOPPING_BUTTON).click();
+        continueShoppingButton.click();
     }
 
     public void clickCheckoutButton() {
-        driver.findElement(CHECKOUT_BUTTON).click();
+        checkoutButton.click();
     }
 
     public int getCountOfProducts() {

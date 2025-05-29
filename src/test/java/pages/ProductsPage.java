@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
@@ -21,43 +22,18 @@ public class ProductsPage extends BasePage implements NavigationModule{
         super(driver);
     }
 
-    @Override
-    public void openCart() {
-        driver.findElement(CART_MENU_BUTTON).click();
+    public ProductsPage open() {
+        driver.get(BASE_URL + "inventory.html");
+        return this;
     }
 
     @Override
-    public void openBurgerMenu() {
-        driver.findElement(BURGER_MENU_BUTTON).click();
-    }
-
-    @Override
-    public void closeBurgerMenu() {
-        driver.findElement(BURGER_CLOSE_BUTTON).click();
-    }
-
-    @Override
-    public void clickLogoutFromBurgerMenu() {
-        driver.findElement(BURGER_LOGOUT_BUTTON).click();
-    }
-
-    @Override
-    public void clickAllItemsFromBurgerMenu() {
-        driver.findElement(BURGER_ALL_ITEMS_BUTTON).click();
-    }
-
-    @Override
-    public void clickAboutFromBurgerMenu() {
-        driver.findElement(BURGER_ABOUT_BUTTON).click();
-    }
-
-    @Override
-    public void clickResetFromBurgerMenu() {
-        driver.findElement(BURGER_RESET_BUTTON).click();
-    }
-
-    public String getTitle() {
-        return driver.findElement(TITLE).getText();
+    public ProductsPage isOpened() {
+        wait.until(ExpectedConditions.attributeContains(
+                title.getLocator(),
+                "span",
+                "Products"));
+        return this;
     }
 
     public void addProduct(String... products) {
@@ -135,9 +111,5 @@ public class ProductsPage extends BasePage implements NavigationModule{
         productsName.sort(Comparator.reverseOrder());
 
         return productsName;
-    }
-
-    public void open() {
-        driver.get(BASE_URL + "inventory.html");
     }
 }
