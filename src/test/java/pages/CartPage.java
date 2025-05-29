@@ -42,10 +42,6 @@ public class CartPage extends BasePage implements NavigationModule {
          return driver.findElement(BURGER_CLOSE_BUTTON);
     }
 
-    public String getTitle() {
-        return driver.findElement(TITLE).getText();
-    }
-
     public void removeProduct(String product) {
         driver.findElement(By.xpath(String.format(REMOVE_BUTTON, product))).click();
     }

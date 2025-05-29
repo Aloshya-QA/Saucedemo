@@ -20,8 +20,7 @@ public class LoginTest extends BaseTest {
     @TmsLink("TMS")
     @Issue("TMS")
     public void checkSuccessLogin() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginStep.auth("standard_user", "secret_sauce");
         assertEquals(productsPage.getTitle(), "Products", "Not login");
     }
 

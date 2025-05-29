@@ -7,6 +7,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import pages.*;
+import steps.LoginStep;
 import utils.AllureUtils;
 import utils.TestListener;
 
@@ -22,6 +23,7 @@ public class BaseTest {
     CartPage cartPage;
     CheckoutPage checkoutPage;
     ProductsDetailPage productsDetailPage;
+    LoginStep loginStep;
 
     @Parameters({"browser"})
     @BeforeMethod(alwaysRun = true)
@@ -41,6 +43,7 @@ public class BaseTest {
         cartPage = new CartPage(driver);
         checkoutPage = new CheckoutPage(driver);
         productsDetailPage = new ProductsDetailPage(driver);
+        loginStep = new LoginStep(driver);
     }
 
     private static ChromeOptions getChromeOptions() {

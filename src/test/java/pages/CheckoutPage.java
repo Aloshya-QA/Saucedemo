@@ -29,10 +29,6 @@ public class CheckoutPage extends BasePage implements NavigationModule {
             totalProductPrice = new Text(driver, "error"),
             taxPrice = new Text(driver, "error");
 
-    public String getTitle() {
-        return title.getText();
-    }
-
     public CheckoutPage open() {
         driver.get(BASE_URL + "checkout-step-one.html");
         return this;
