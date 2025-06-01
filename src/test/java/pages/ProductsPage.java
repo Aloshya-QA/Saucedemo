@@ -5,28 +5,30 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import wrappers.Text;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ProductsPage extends BasePage implements NavigationModule{
+public class ProductsPage extends BasePage {
 
-    private static final String ADD_TO_CART_BUTTON =
-            "//*[text() = '%s']/ancestor::div[@class = 'inventory_item']//button";
-    private static final By PRODUCTS_NAME = By.cssSelector(".inventory_item_name "),
+    private static final String
+            ADD_TO_CART_BUTTON = "//div[text() = '%s']/ancestor::div[@class = 'inventory_item']" +
+            "//button[text()='Add to cart']",
+            REMOVE_BUTTON = "//div[text() = '%s']/ancestor::div[@class = 'inventory_item']" +
+            "//button[text()='Remove']";
+
+    private static final By
+            PRODUCTS_NAME = By.cssSelector(".inventory_item_name "),
             PRODUCTS_PRICE = By.cssSelector(".inventory_item_price"),
             SORT_OPTIONS_BUTTON = By.cssSelector(".product_sort_container");
-
-    private final Text title = new Text(driver, "title");
 
     public ProductsPage(WebDriver driver) {
         super(driver);
     }
 
     public String getTitle() {
-        return title.getText();
+        return driver.findElement(TITLE).getText();
     }
 
     public ProductsPage open() {
@@ -36,29 +38,56 @@ public class ProductsPage extends BasePage implements NavigationModule{
 
     @Override
     public ProductsPage isOpened() {
-//        wait.until(ExpectedConditions.attributeContains(
-//                title.getLocator(),
-//                "textContent",
-//                "Products"));
-        wait.until(ExpectedConditions.visibilityOf(title.getLocator()));
+        wait.until(ExpectedConditions.textToBe(TITLE, "Products"));
         return this;
     }
 
-    public void addProduct(String... products) {
+    public ProductsPage addProduct(String... products) {
         for (String product : products) {
             driver.findElement(By.xpath(String.format(ADD_TO_CART_BUTTON, product))).click();
         }
+
+        return this;
     }
 
-    public void sortProductsButton(int option) {
-        Select select = new Select(driver.findElement(SORT_OPTIONS_BUTTON));
-        select.getOptions().get(option).click();
+    public List<String> getNameAddedProducts() {
+        List<WebElement> cardsList = driver.findElements(By.xpath(
+                "//button[text()='Remove']" +
+                        "/ancestor::div[@data-test='inventory-item']" +
+                        "//div[@data-test='inventory-item-name']"));
+        List<String> productsName = new ArrayList<>();
 
+        for (WebElement webElement : cardsList) {
+            productsName.add(webElement.getText());
+        }
+
+        return productsName;
+    }
+
+    public ProductsPage removeProduct(String... products) {
+        for (String product : products) {
+            driver.findElement(By.xpath(String.format(REMOVE_BUTTON, product))).click();
+        }
+
+        return this;
+    }
+
+    public void sortProductsButton(String sortValue) {
+        Select select = new Select(driver.findElement(SORT_OPTIONS_BUTTON));
+        int option = switch (sortValue.toLowerCase()) {
+            case "z to a" -> 1;
+            case "low to high" -> 2;
+            case "high to low" -> 3;
+            default -> 0;
+        };
+
+        select.getOptions().get(option).click();
     }
 
     public List<String> getListProductsName() {
         List<WebElement> products = driver.findElements(PRODUCTS_NAME);
         List<String> productsName = new ArrayList<>();
+
         for (WebElement webElement : products) {
             productsName.add(webElement.getText());
         }
@@ -69,6 +98,7 @@ public class ProductsPage extends BasePage implements NavigationModule{
     public List<Double> getListProductsPrice() {
         List<WebElement> products = driver.findElements(PRODUCTS_PRICE);
         List<Double> productsPrice = new ArrayList<>();
+
         for (WebElement webElement : products) {
             productsPrice.add(Double.parseDouble(webElement
                     .getText()
@@ -80,43 +110,50 @@ public class ProductsPage extends BasePage implements NavigationModule{
         return productsPrice;
     }
 
-    public List<Double> getListProductsPriceASC() {
+    public List<Double> getListProductsPrice(String sortValue) {
         List<WebElement> products = driver.findElements(PRODUCTS_PRICE);
         List<Double> productsPrice = new ArrayList<>();
-        for (WebElement webElement : products) {
-            productsPrice.add(Double.parseDouble(webElement
-                    .getText()
-                    .substring(webElement
-                            .getText()
-                            .indexOf('$') + 1)));
+
+        if (sortValue.equalsIgnoreCase("low to high")) {
+            for (WebElement webElement : products) {
+                productsPrice.add(Double.parseDouble(webElement
+                        .getText()
+                        .substring(webElement
+                                .getText()
+                                .indexOf('$') + 1)));
+            }
+            productsPrice.sort(null);
+
+        } else if (sortValue.equalsIgnoreCase("high to low")) {
+            for (WebElement webElement : products) {
+                productsPrice.add(Double.parseDouble(webElement
+                        .getText()
+                        .substring(webElement
+                                .getText()
+                                .indexOf('$') + 1)));
+            }
+            productsPrice.sort(Comparator.reverseOrder());
         }
-        productsPrice.sort(null);
 
         return productsPrice;
     }
 
-    public List<Double> getListProductsPriceDESC() {
-        List<WebElement> products = driver.findElements(PRODUCTS_PRICE);
-        List<Double> productsPrice = new ArrayList<>();
-        for (WebElement webElement : products) {
-            productsPrice.add(Double.parseDouble(webElement
-                    .getText()
-                    .substring(webElement
-                            .getText()
-                            .indexOf('$') + 1)));
-        }
-        productsPrice.sort(Comparator.reverseOrder());
-
-        return productsPrice;
-    }
-
-    public List<String> getListProductsNameDESC() {
+    public List<String> getListProductsName(String sortValue) {
         List<WebElement> products = driver.findElements(PRODUCTS_NAME);
         List<String> productsName = new ArrayList<>();
-        for (WebElement webElement : products) {
-            productsName.add(webElement.getText());
+
+        if (sortValue.equalsIgnoreCase("A to Z")) {
+            for (WebElement webElement : products) {
+                productsName.add(webElement.getText());
+            }
+            productsName.sort(null);
+
+        } else if (sortValue.equalsIgnoreCase("Z to A")) {
+            for (WebElement webElement : products) {
+                productsName.add(webElement.getText());
+            }
+            productsName.sort(Comparator.reverseOrder());
         }
-        productsName.sort(Comparator.reverseOrder());
 
         return productsName;
     }

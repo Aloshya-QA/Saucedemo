@@ -1,12 +1,10 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import wrappers.Button;
 import wrappers.Input;
-import wrappers.Text;
+import wrappers.Label;
 
 public class LoginPage extends BasePage {
 
@@ -21,8 +19,8 @@ public class LoginPage extends BasePage {
     private final Button
             loginButton = new Button(driver, "login-button");
 
-    private final Text
-            errorMessage = new Text(driver, "error");
+    private final Label
+            errorMessage = new Label(driver, "error");
 
     public LoginPage open() {
         driver.get(BASE_URL);
@@ -40,6 +38,10 @@ public class LoginPage extends BasePage {
         passwordField.fill(password);
         loginButton.click();
         return new ProductsPage(driver);
+    }
+
+    public boolean isLoginButtonVisible() {
+        return loginButton.getLocator().isDisplayed();
     }
 
     public String getErrorMessage() {

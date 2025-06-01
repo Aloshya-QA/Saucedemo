@@ -2,14 +2,9 @@ package tests;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
-import pages.NavigationModule;
 
-import java.time.Duration;
-
-import static org.testng.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class NavigationModuleTest extends BaseTest{
 
@@ -18,13 +13,11 @@ public class NavigationModuleTest extends BaseTest{
             " оно успешно открывается")
     @Step("Ожидаем открытия бургер-меню")
     public void checkOpenBurgerMenu() {
-        WebDriverWait wait = new WebDriverWait( driver, Duration.ofSeconds(10));
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-//        cartPage.openCart();
-//        cartPage.openBurgerMenu();
-        wait.until(ExpectedConditions.visibilityOf(cartPage.buttonCloseBurgerMenu()));
-        assertTrue(cartPage.buttonCloseBurgerMenu().isDisplayed());
+        loginStep.auth("standard_user", "secret_sauce");
+        navigationModule.burgerMenu()
+                .open()
+                .isOpened();
+        assertThat(navigationModule.burgerMenu().isVisibility()).isTrue();
     }
 
     @Test(testName = "Проверка кнопки зыкрывающей бургер меню", groups = {"Regression"})
@@ -32,15 +25,14 @@ public class NavigationModuleTest extends BaseTest{
             " оно закрывается")
     @Step("Ожидаем закрытия бургер-меню")
     public void checkCloseBurgerMenu() {
-        WebDriverWait wait = new WebDriverWait( driver, Duration.ofSeconds(10));
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-//        cartPage.openCart();
-//        cartPage.openBurgerMenu();
-        wait.until(ExpectedConditions.visibilityOf(cartPage.buttonCloseBurgerMenu()));
-//        cartPage.closeBurgerMenu();
-        wait.until(ExpectedConditions.invisibilityOf(cartPage.buttonCloseBurgerMenu()));
-        assertFalse(cartPage.buttonCloseBurgerMenu().isDisplayed());
+        loginStep.auth("standard_user", "secret_sauce");
+        navigationModule.burgerMenu()
+                .open()
+                .isOpened()
+                .closeBurgerMenu()
+                .isClosed();
+        assertThat(navigationModule.burgerMenu().isVisibility())
+                .isFalse();
     }
 
     @Test(testName = "Проверка кнопки 'Logout' в бургер меню", groups = {"Regression"})
@@ -48,14 +40,14 @@ public class NavigationModuleTest extends BaseTest{
             " происходит логаут")
     @Step("Ожидаем логаут юзера")
     public void checkLogoutButtonFromBurgerMenu() {
-        WebDriverWait wait = new WebDriverWait( driver, Duration.ofSeconds(10));
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-//        cartPage.openCart();
-//        cartPage.openBurgerMenu();
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(NavigationModule.BURGER_MENU)));
-//        cartPage.clickLogoutFromBurgerMenu();
-//        assertTrue(loginPage.isLoginButtonVisible());
+        loginStep.auth("standard_user", "secret_sauce");
+        navigationModule.burgerMenu()
+                .open()
+                .isOpened()
+                .clickLogoutButton()
+                .isOpened();
+        assertThat(loginPage.isLoginButtonVisible())
+                .isTrue();
     }
 
     @Test(testName = "Проверка кнопки 'All Items' в бургер меню", groups = {"Regression"})
@@ -63,23 +55,25 @@ public class NavigationModuleTest extends BaseTest{
             " открывается страница товаров")
     @Step("Ожидаем переход на страницу товаров")
     public void checkAllItemsButtonFromBurgerMenu() {
-        WebDriverWait wait = new WebDriverWait( driver, Duration.ofSeconds(10));
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-//        cartPage.openCart();
-//        cartPage.openBurgerMenu();
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(NavigationModule.BURGER_MENU)));
-//        cartPage.clickAllItemsFromBurgerMenu();
-//        assertEquals(productsPage.getTitle(), "Products");
+        loginStep.auth("standard_user", "secret_sauce");
+        navigationModule.burgerMenu()
+                .open()
+                .isOpened()
+                .clickAllItemsButton()
+                .isOpened();
+        assertThat(productsPage.getTitle())
+                .isEqualTo("Products");
     }
 
     @Test(testName = "Проверка кнопки перехода в корзину", groups = {"Smoke"})
     @Description("Проверяет, что при нажатии кнопки 'Cart' открывается корзина")
     @Step("Ожидаем переход в корзину")
     public void checkOpenCart() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-//        cartPage.openCart();
-//        assertEquals(cartPage.getTitle(), "Your Cart");
+        loginStep.auth("standard_user", "secret_sauce");
+        navigationModule.cart()
+                .open()
+                .isOpened();
+        assertThat(cartPage.getTitle())
+                .isEqualTo("Your Cart");
     }
 }

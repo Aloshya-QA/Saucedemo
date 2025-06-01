@@ -3,7 +3,6 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import wrappers.Text;
 
 import java.time.Duration;
 
@@ -13,6 +12,7 @@ public abstract class BasePage {
     WebDriverWait wait;
 
     public static final String BASE_URL = "https://www.saucedemo.com/";
+    public static final By TITLE = By.cssSelector("[data-test='title']");
 
     public BasePage(WebDriver driver) {
         this.driver = driver;

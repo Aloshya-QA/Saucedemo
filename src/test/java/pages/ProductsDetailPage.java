@@ -2,21 +2,18 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import wrappers.Button;
 
 import java.util.Objects;
 
-public class ProductsDetailPage extends BasePage implements NavigationModule{
+public class ProductsDetailPage extends BasePage {
 
     private static final String GET_ITEM_ID = "//div[text()='%s']/ancestor::a";
-//    private final WebElement
-//            detailsForm = driver.findElement(
-//                    By.xpath("//div[@class='inventory_details']"));
 
     private final Button
             addToCartButton = new Button(driver, "add-to-cart"),
+            backToProductsButton = new Button(driver, "back-to-products"),
             removeButton = new Button(driver, "remove");
 
     public ProductsDetailPage(WebDriver driver) {
@@ -24,8 +21,8 @@ public class ProductsDetailPage extends BasePage implements NavigationModule{
     }
 
     @Override
-    public BasePage isOpened() {
-//        wait.until(ExpectedConditions.visibilityOf(detailsForm));
+    public ProductsDetailPage isOpened() {
+        wait.until(ExpectedConditions.visibilityOf(backToProductsButton.getLocator()));
         return this;
     }
 
@@ -39,11 +36,22 @@ public class ProductsDetailPage extends BasePage implements NavigationModule{
         return this;
     }
 
-    public void clickAddButton() {
+    public ProductsDetailPage clickAddButton() {
         addToCartButton.click();
+        return this;
     }
 
-    public void clickRemoveButton() {
+    public ProductsDetailPage clickRemoveButton() {
         removeButton.click();
+        return this;
+    }
+
+    public ProductsPage clickBackToProductsButton() {
+        backToProductsButton.click();
+        return new ProductsPage(driver);
+    }
+
+    public String getBackToProductsButtonText() {
+        return backToProductsButton.getLocator().getText();
     }
 }

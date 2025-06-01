@@ -4,12 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class Text {
+public class Label {
 
     WebDriver driver;
     String label;
 
-    public Text(WebDriver driver, String label) {
+    public Label(WebDriver driver, String label) {
         this.driver = driver;
         this.label = label;
     }
