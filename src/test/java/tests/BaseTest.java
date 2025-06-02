@@ -7,6 +7,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import pages.*;
+import steps.CartFillStep;
+import steps.CheckoutStep;
+import steps.LoginStep;
 import utils.AllureUtils;
 import utils.TestListener;
 
@@ -22,6 +25,10 @@ public class BaseTest {
     CartPage cartPage;
     CheckoutPage checkoutPage;
     ProductsDetailPage productsDetailPage;
+    NavigationModule navigationModule;
+    LoginStep loginStep;
+    CheckoutStep checkoutStep;
+    CartFillStep cartFillStep;
 
     @Parameters({"browser"})
     @BeforeMethod(alwaysRun = true)
@@ -41,6 +48,10 @@ public class BaseTest {
         cartPage = new CartPage(driver);
         checkoutPage = new CheckoutPage(driver);
         productsDetailPage = new ProductsDetailPage(driver);
+        navigationModule = new NavigationModule(driver);
+        loginStep = new LoginStep(driver);
+        checkoutStep = new CheckoutStep(driver);
+        cartFillStep = new CartFillStep(driver);
     }
 
     private static ChromeOptions getChromeOptions() {

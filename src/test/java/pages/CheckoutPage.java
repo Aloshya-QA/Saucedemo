@@ -1,121 +1,110 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import wrappers.Button;
+import wrappers.Input;
+import wrappers.Label;
 
-public class CheckoutPage extends BasePage implements NavigationModule{
+import java.util.Objects;
 
-    private static final By FIRST_NAME_INPUT = By.xpath(
-            "//div[@class='checkout_info']/descendant::input[@id='first-name']"),
-            LAST_NAME_INPUT = By.xpath(
-            "//div[@class='checkout_info']/descendant::input[@id='last-name']"),
-            POSTAL_CODE_INPUT = By.xpath(
-            "//div[@class='checkout_info']/descendant::input[@id='postal-code']"),
-            CONTINUE_BUTTON = By.xpath(
-            "//div[@class='checkout_buttons']/descendant::input[@id='continue']"),
-            CANCEL_BUTTON = By.xpath(
-            "//button[@id='cancel']"),
-            ERROR_MESSAGE = By.xpath(
-                    "//div[@class='checkout_info']/descendant::h3[@data-test='error']"),
-            FINISH_BUTTON = By.xpath("//button[@id='finish']"),
-            BACK_HOME_BUTTON = By.xpath("//button[@id='back-to-products']"),
-            TOTAL_PRICE_FIELD = By.xpath(
-                    "//div[@class='summary_info']/descendant::div[@class='summary_total_label']"),
-            TOTAL_PRODUCTS_PRICE_FIELD = By.xpath(
-                    "//div[@class='summary_info']/descendant::div[@class='summary_subtotal_label']"),
-            TAX_PRICE_FIELD = By.xpath(
-                    "//div[@class='summary_info']/descendant::div[@class='summary_tax_label']");
+public class CheckoutPage extends BasePage {
 
     public CheckoutPage(WebDriver driver) {
         super(driver);
     }
 
-    @Override
-    public void openCart() {
-        driver.findElement(CART_MENU_BUTTON).click();
-    }
+    private final Input
+            firstNameField = new Input(driver, "first-name"),
+            lastNameField = new Input(driver, "last-name"),
+            postalCodeField = new Input(driver, "postal-code");
 
-    @Override
-    public void openBurgerMenu() {
-        driver.findElement(BURGER_MENU_BUTTON).click();
-    }
+    private final Button
+            cancelButton = new Button(driver, "cancel"),
+            continueButton = new Button(driver, "continue"),
+            finishButton = new Button(driver, "finish"),
+            backHomeButton = new Button(driver, "back-to-products");
 
-    @Override
-    public void closeBurgerMenu() {
-        driver.findElement(BURGER_CLOSE_BUTTON).click();
-    }
-
-    @Override
-    public void clickLogoutFromBurgerMenu() {
-        driver.findElement(BURGER_LOGOUT_BUTTON).click();
-    }
-
-    @Override
-    public void clickAllItemsFromBurgerMenu() {
-        driver.findElement(BURGER_ALL_ITEMS_BUTTON).click();
-    }
-
-    @Override
-    public void clickAboutFromBurgerMenu() {
-        driver.findElement(BURGER_ABOUT_BUTTON).click();
-    }
-
-    @Override
-    public void clickResetFromBurgerMenu() {
-        driver.findElement(BURGER_RESET_BUTTON).click();
-    }
+    private final Label
+            errorMessage = new Label(driver, "error"),
+            totalPrice = new Label(driver, "total-label"),
+            totalProductPrice = new Label(driver, "subtotal-label"),
+            taxPrice = new Label(driver, "tax-label");
 
     public String getTitle() {
         return driver.findElement(TITLE).getText();
     }
 
-    public void open() {
+    public CheckoutPage open() {
         driver.get(BASE_URL + "checkout-step-one.html");
+        return this;
     }
 
-    public void enterCheckoutInfo(String firstName, String lastName, String postalCode) {
-        driver.findElement(FIRST_NAME_INPUT).sendKeys(firstName);
-        driver.findElement(LAST_NAME_INPUT).sendKeys(lastName);
-        driver.findElement(POSTAL_CODE_INPUT).sendKeys(postalCode);
-        driver.findElement(CONTINUE_BUTTON).click();
+    @Override
+    public CheckoutPage isOpened() {
+        if (Objects.requireNonNull(driver.getCurrentUrl()).contains("checkout-step-one.html")) {
+            wait.until(ExpectedConditions.textToBe(TITLE, "Checkout: Your Information"));
+        } else if (Objects.requireNonNull(driver.getCurrentUrl()).contains("checkout-step-two.html")) {
+            wait.until(ExpectedConditions.textToBe(TITLE, "Checkout: Overview"));
+        } else if (Objects.requireNonNull(driver.getCurrentUrl()).contains("checkout-complete.html")) {
+            wait.until(ExpectedConditions.textToBe(TITLE, "Checkout: Complete!"));
+        }
+
+        return this;
     }
 
-    public void clickCancelButton() {
-        driver.findElement(CANCEL_BUTTON).click();
+    public CheckoutPage enterCheckoutInfo(String firstName, String lastName, String postalCode) {
+        firstNameField.fill(firstName);
+        lastNameField.fill(lastName);
+        postalCodeField.fill(postalCode);
+        continueButton.click();
+        return this;
     }
 
-    public void clickFinishButton() {
-        driver.findElement(FINISH_BUTTON).click();
+    public CartPage clickCancelButton() {
+        cancelButton.click();
+        return new CartPage(driver);
     }
 
-    public void clickBackHomeButton() {
-        driver.findElement(BACK_HOME_BUTTON).click();
+    public ProductsPage clickCancelSecondButton() {
+        cancelButton.click();
+        return new ProductsPage(driver);
+    }
+
+    public CheckoutPage clickFinishButton() {
+        finishButton.click();
+        return this;
+    }
+
+    public ProductsPage clickBackHomeButton() {
+        backHomeButton.click();
+        return new ProductsPage(driver);
     }
 
     public String getErrorMessage() {
-        return driver.findElement(ERROR_MESSAGE).getText();
+        return errorMessage.getText();
     }
 
     public Double getProductsTotalPrice() {
-        return Double.parseDouble(driver.findElement(TOTAL_PRODUCTS_PRICE_FIELD)
+        return Double.parseDouble(totalProductPrice
                 .getText()
-                .substring(driver.findElement(TOTAL_PRODUCTS_PRICE_FIELD)
+                .substring(totalProductPrice
                         .getText()
                         .indexOf('$') + 1));
     }
 
     public Double getTaxPrice() {
-        return Double.parseDouble(driver.findElement(TAX_PRICE_FIELD)
+        return Double.parseDouble(taxPrice
                 .getText()
-                .substring(driver.findElement(TAX_PRICE_FIELD)
+                .substring(taxPrice
                         .getText()
                         .indexOf('$') + 1));
     }
 
     public Double getTotalPrice() {
-        return Double.parseDouble(driver.findElement(TOTAL_PRICE_FIELD)
+        return Double.parseDouble(totalPrice
                 .getText()
-                .substring(driver.findElement(TOTAL_PRICE_FIELD)
+                .substring(totalPrice
                         .getText()
                         .indexOf('$') + 1));
     }

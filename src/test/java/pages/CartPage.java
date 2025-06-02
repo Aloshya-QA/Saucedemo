@@ -3,96 +3,84 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import wrappers.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CartPage extends BasePage implements NavigationModule {
+public class CartPage extends BasePage {
 
-    private static final String REMOVE_BUTTON = "//div[text() = '%s']/ancestor::div[@class = 'cart_item']//button";
-    private static final By PRODUCTS_NAME = By.xpath(
-            "//div[@class= 'cart_item']/descendant::div[@class = 'inventory_item_name']");
-    private static final By PRODUCTS_PRICE = By.xpath(
+    private static final String
+            REMOVE_BUTTON = "//div[text() = '%s']/ancestor::div[@class = 'cart_item']//button",
+            PRODUCT_PRICE = "//div[text() = '%s']" +
+                    "/ancestor::div[@data-test='inventory-item']" +
+                    "//div[@data-test='inventory-item-price']";
+
+    private static final By
+            PRODUCTS_NAME = By.xpath(
+            "//div[@class= 'cart_item']/descendant::div[@class = 'inventory_item_name']"),
+            PRODUCTS_PRICE = By.xpath(
             "//div[@class= 'cart_item']/descendant::div[@class = 'inventory_item_price']");
-    private static final By CONTINUE_SHOPPING_BUTTON = By.xpath(
-            "//div[@class = 'cart_footer']/button[@id = 'continue-shopping']");
-    private static final By CHECKOUT_BUTTON = By.xpath(
-            "//div[@class = 'cart_footer']/button[@id = 'checkout']");
 
     public CartPage(WebDriver driver) {
         super(driver);
     }
 
-    @Override
-    public void openCart() {
-        driver.findElement(CART_MENU_BUTTON).click();
-    }
-
-    @Override
-    public void openBurgerMenu() {
-        driver.findElement(BURGER_MENU_BUTTON).click();
-    }
-
-    @Override
-    public void closeBurgerMenu() {
-        driver.findElement(BURGER_CLOSE_BUTTON).click();
-    }
-
-    @Override
-    public void clickLogoutFromBurgerMenu() {
-        driver.findElement(BURGER_LOGOUT_BUTTON).click();
-    }
-
-    @Override
-    public void clickAllItemsFromBurgerMenu() {
-        driver.findElement(BURGER_ALL_ITEMS_BUTTON).click();
-    }
-
-    @Override
-    public void clickAboutFromBurgerMenu() {
-        driver.findElement(BURGER_ABOUT_BUTTON).click();
-    }
-
-    @Override
-    public void clickResetFromBurgerMenu() {
-        driver.findElement(BURGER_RESET_BUTTON).click();
-    }
-
-    public WebElement buttonCloseBurgerMenu() {
-         return driver.findElement(BURGER_CLOSE_BUTTON);
-    }
+    private final Button
+            continueShoppingButton = new Button(driver, "continue-shopping"),
+            checkoutButton = new Button(driver, "checkout");
 
     public String getTitle() {
         return driver.findElement(TITLE).getText();
+    }
+
+    public CartPage open() {
+        driver.get(BASE_URL + "cart.html");
+        return this;
+    }
+
+    @Override
+    public CartPage isOpened() {
+        wait.until(ExpectedConditions.visibilityOf(checkoutButton.getLocator()));
+        return this;
     }
 
     public void removeProduct(String product) {
         driver.findElement(By.xpath(String.format(REMOVE_BUTTON, product))).click();
     }
 
-    public void clickContinueShoppingButton() {
-        driver.findElement(CONTINUE_SHOPPING_BUTTON).click();
+    public ProductsPage clickContinueShoppingButton() {
+        continueShoppingButton.click();
+        return new ProductsPage(driver);
     }
 
-    public void clickCheckoutButton() {
-        driver.findElement(CHECKOUT_BUTTON).click();
+    public CheckoutPage clickCheckoutButton() {
+        checkoutButton.click();
+        return new CheckoutPage(driver);
     }
 
     public int getCountOfProducts() {
         return driver.findElements(PRODUCTS_NAME).size();
     }
 
-    public String getProductsName(int index) {
+    public List<String> getProductsName() {
         List<WebElement> productsName = driver.findElements(PRODUCTS_NAME);
-        return productsName.get(index).getText();
+        List<String> listProductsName = new ArrayList<>();
+        for (WebElement webElement : productsName) {
+            listProductsName.add(webElement.getText());
+        }
+
+        return listProductsName;
     }
 
-    public Double getProductPrice(int index) {
-        List<WebElement> productsName = driver.findElements(PRODUCTS_PRICE);
-        return Double.parseDouble(productsName.get(index)
-                .getText()
-                .substring(productsName.get(index)
-                        .getText()
-                        .indexOf('$') + 1));
+    public Double getProductPrice(String productName) {
+        String productPrice = driver.findElement(
+                By.xpath(
+                        String.format(PRODUCT_PRICE, productName))).getText();
+        return Double.parseDouble(
+                productPrice.substring(
+                        productPrice.indexOf('$') + 1));
     }
 
     public Double getProductTotalPrice() {

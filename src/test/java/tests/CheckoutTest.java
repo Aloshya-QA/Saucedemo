@@ -1,33 +1,39 @@
 package tests;
 
+import dto.CheckoutInfo;
+import dto.CheckoutInfoFactory;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CheckoutTest extends BaseTest{
 
     @DataProvider
-    public Object[][] loginData() {
+    public Object[][] checkoutData() {
+        CheckoutInfo data = CheckoutInfoFactory.checkoutInfo();
         return new Object[][] {
-                {"Test", "Test", "Test"},
-                {"11123", "Test", "12312313"},
-                {"Test", "11231", "123"}
-        };
+                {data.getFirstName(), data.getLastName(), data.getPostalCode()}};
     }
 
-    @Test(dataProvider = "loginData", testName = "Проверка успешного ввода инофрмации", groups = {"Smoke"} )
+    @Test(dataProvider = "checkoutData",
+            testName = "Проверка успешного ввода инофрмации",
+            groups = {"Smoke", "Regression"} )
     @Description("Проверяет, что при корректном вводе имени," +
             " фамилии и почтового индекса пользователь переходит на шаг 'Checkout: Overview'")
-    @Step("Ввод данных для оформления заказа: Имя = {firstName}, Фамилия = {lastName}, Индекс = {postalCode}")
+    @Step("Ввод данных для оформления заказа: Имя = {firstName}," +
+            " Фамилия = {lastName}," +
+            " Индекс = {postalCode}")
     public void verifySuccessCheckout(String firstName, String lastName, String postalCode) {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo(firstName, lastName, postalCode);
-        assertEquals(checkoutPage.getTitle(), "Checkout: Overview");
+        loginStep.auth("standard_user", "secret_sauce");
+        checkoutPage.open()
+                .isOpened()
+                .enterCheckoutInfo(firstName, lastName, postalCode)
+                .isOpened();
+        assertThat(checkoutPage.getTitle())
+                .isEqualTo("Checkout: Overview");
     }
 
     @Test(testName = "Проверка ввода информации с пустыми полями", groups = {"Regression"})
@@ -35,11 +41,13 @@ public class CheckoutTest extends BaseTest{
             " происходит валидация и переход на следующий шаг не выполняется")
     @Step("Попытка ввода пустых значений в форму оформления")
     public void verifyCheckoutWithEmptyFields() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("", "", "");
-        assertNotEquals(checkoutPage.getTitle(), "Checkout: Overview");
+        loginStep.auth("standard_user", "secret_sauce");
+        checkoutPage.open()
+                .isOpened()
+                .enterCheckoutInfo("", "", "")
+                .isOpened();
+        assertThat(checkoutPage.getTitle())
+                .isNotEqualTo("Checkout: Overview");
     }
 
     @Test(testName = "Проверка ввода информации с пустым полем 'First Name'", groups = {"Regression"})
@@ -47,11 +55,13 @@ public class CheckoutTest extends BaseTest{
             " с пустым полем 'First Name' отображается корректное сообщение об ошибке")
     @Step("Ввод данных с пустым полем 'First Name'")
     public void verifyCheckoutWithEmptyFirstNameField() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("", "Gold", "11111");
-        assertEquals(checkoutPage.getErrorMessage(), "Error: First Name is required");
+        loginStep.auth("standard_user", "secret_sauce");
+        checkoutPage.open()
+                .isOpened()
+                .enterCheckoutInfo("", "Gold", "12345")
+                .isOpened();
+        assertThat(checkoutPage.getErrorMessage())
+                .isEqualTo("Error: First Name is required");
     }
 
     @Test(testName = "Проверка ввода информации с пустым полем 'Last Name'", groups = {"Regression"})
@@ -59,11 +69,13 @@ public class CheckoutTest extends BaseTest{
             " с пустым полем 'Last Name' отображается корректное сообщение об ошибке")
     @Step("Ввод данных с пустым полем 'Last Name'")
     public void verifyCheckoutWithEmptyLastNameField() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("Joe", "", "11111");
-        assertEquals(checkoutPage.getErrorMessage(), "Error: Last Name is required");
+        loginStep.auth("standard_user", "secret_sauce");
+        checkoutPage.open()
+                .isOpened()
+                .enterCheckoutInfo("Joe", "", "12345")
+                .isOpened();
+        assertThat(checkoutPage.getErrorMessage())
+                .isEqualTo("Error: Last Name is required");
     }
 
     @Test(testName = "Проверка ввода информации с пустым полем 'Postal Code'", groups = {"Regression"})
@@ -71,11 +83,13 @@ public class CheckoutTest extends BaseTest{
             " с пустым полем 'Postal Code' отображается корректное сообщение об ошибке")
     @Step("Ввод данных с пустым полем 'Postal Code'")
     public void verifyCheckoutWithEmptyPostalCodeField() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("Joe", "Gold", "");
-        assertEquals(checkoutPage.getErrorMessage(), "Error: Postal Code is required");
+        loginStep.auth("standard_user", "secret_sauce");
+        checkoutPage.open()
+                .isOpened()
+                .enterCheckoutInfo("Joe", "Gold", "")
+                .isOpened();
+        assertThat(checkoutPage.getErrorMessage())
+                .isEqualTo("Error: Postal Code is required");
     }
 
     @Test(testName = "Проверка стоимости товаров", groups = {"Regression"})
@@ -83,12 +97,14 @@ public class CheckoutTest extends BaseTest{
             " с отображаемой на шаге оформления заказа")
     @Step("Сравнение общей суммы товаров в корзине и на странице оформления")
     public void checkProductsTotalPrice() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginStep.auth("standard_user", "secret_sauce");
         productsPage.addProduct("Sauce Labs Backpack", "Sauce Labs Bike Light");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("Test", "Test", "11111");
-        assertEquals(cartPage.getProductTotalPrice(), checkoutPage.getProductsTotalPrice());
+        checkoutPage.open()
+                .isOpened()
+                .enterCheckoutInfo("Joe", "Gold", "12345")
+                .isOpened();
+        assertThat(cartPage.getProductTotalPrice())
+                .isEqualTo(checkoutPage.getProductsTotalPrice());
     }
 
     @Test(testName = "Проверка суммы налога", groups = {"Regression"})
@@ -96,12 +112,14 @@ public class CheckoutTest extends BaseTest{
             " рассчитывается корректно от общей стоимости товаров")
     @Step("Проверка корректности расчёта налога: 8% от общей стоимости товаров")
     public void checkTaxPrice() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginStep.auth("standard_user", "secret_sauce");
         productsPage.addProduct("Sauce Labs Backpack", "Sauce Labs Bike Light");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("Test", "Test", "11111");
-        assertEquals(Math.round(cartPage.getProductTotalPrice() * 0.8) / 10.0, checkoutPage.getTaxPrice());
+        checkoutPage.open()
+                .isOpened()
+                .enterCheckoutInfo("Joe", "Gold", "12345")
+                .isOpened();
+        assertThat(Math.round(cartPage.getProductTotalPrice() * 0.8) / 10.0)
+                .isEqualTo(checkoutPage.getTaxPrice());
     }
 
     @Test(testName = "Проверка итоговй суммы", groups = {"Regression"})
@@ -109,14 +127,15 @@ public class CheckoutTest extends BaseTest{
             " на этапе оформления покупки, включая товары и налог.")
     @Step("Проверяем итоговую стоимость заказа")
     public void checkTotalPrice() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginStep.auth("standard_user", "secret_sauce");
         productsPage.addProduct("Sauce Labs Backpack", "Sauce Labs Bike Light");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("Test", "Test", "11111");
-        assertEquals(cartPage.getProductTotalPrice()
-                + Math.round(cartPage.getProductTotalPrice() * 0.8) / 10.0,
-                checkoutPage.getTotalPrice());
+        checkoutPage.open()
+                .isOpened()
+                .enterCheckoutInfo("Joe", "Gold", "12345")
+                .isOpened();
+        assertThat(cartPage.getProductTotalPrice()
+                + Math.round(cartPage.getProductTotalPrice() * 0.8) / 10.0)
+                .isEqualTo(checkoutPage.getTotalPrice());
     }
 
     @Test(testName = "Проверка кнопки 'Cancel'", groups = {"Regression"})
@@ -124,11 +143,13 @@ public class CheckoutTest extends BaseTest{
             " кнопка 'Cancel' возвращает пользователя в корзину.")
     @Step("Нажимаем кнопку 'Cancel' на шаге Checkout Step One")
     public void checkCancelButtonCheckoutStepOne() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        checkoutPage.open();
-        checkoutPage.clickCancelButton();
-        assertEquals(cartPage.getTitle(), "Your Cart");
+        loginStep.auth("standard_user", "secret_sauce");
+        checkoutPage.open()
+                .isOpened()
+                .clickCancelButton()
+                .isOpened();
+        assertThat(cartPage.getTitle())
+                .isEqualTo("Your Cart");
     }
 
     @Test(testName = "Проверка кнопки 'Cancel' второго шага Checkout", groups = {"Regression"})
@@ -136,26 +157,27 @@ public class CheckoutTest extends BaseTest{
             " возвращает пользователя на страницу с товарами.")
     @Step("Нажимаем кнопку 'Cancel' на втором шаге оформления заказа")
     public void checkCancelButtonCheckoutStepTwo() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("Test", "Test", "11111");
-        checkoutPage.clickCancelButton();
-        assertEquals(productsPage.getTitle(), "Products");
+        loginStep.auth("standard_user", "secret_sauce");
+        checkoutPage.open()
+                .isOpened()
+                .enterCheckoutInfo("Test", "Test", "11111")
+                .isOpened()
+                .clickCancelSecondButton()
+                .isOpened();
+        assertThat(productsPage.getTitle())
+                .isEqualTo("Products");
     }
 
-    @Test(testName = "Проверка кнопки 'Finish'", groups = {"Smoke"})
+    @Test(testName = "Проверка кнопки 'Finish'", groups = {"Smoke", "Regression"})
 
     @Description("Проверяет, что кнопка 'Finish' на втором шаге оформления заказа" +
             " завершает процесс и переводит на страницу подтверждения заказа.")
     @Step("Нажимаем кнопку 'Finish' на втором шаге Checkout")
     public void checkFinishButton() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("Test", "Test", "11111");
-        checkoutPage.clickFinishButton();
-        assertEquals(cartPage.getTitle(), "Checkout: Complete!");
+        loginStep.auth("standard_user", "secret_sauce");
+        checkoutStep.completeOrder("Bob", "Marley", "123456");
+        assertThat(checkoutPage.getTitle())
+                .isEqualTo("Checkout: Complete!");
     }
 
     @Test(testName = "Проверка кнопки 'Back Home'", groups = {"Regression"})
@@ -163,12 +185,11 @@ public class CheckoutTest extends BaseTest{
             " возвращает пользователя на страницу с товарами.")
     @Step("Нажимаем кнопку 'Back Home' после завершения заказа")
     public void checkBackHomeButton() {
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        checkoutPage.open();
-        checkoutPage.enterCheckoutInfo("Test", "Test", "11111");
-        checkoutPage.clickFinishButton();
-        checkoutPage.clickBackHomeButton();
-        assertEquals(productsPage.getTitle(), "Products");
+        loginStep.auth("standard_user", "secret_sauce");
+        checkoutStep.completeOrder("Bob", "Marley", "123456");
+        checkoutPage.clickBackHomeButton()
+                .isOpened();
+        assertThat(productsPage.getTitle())
+                .isEqualTo("Products");
     }
 }
