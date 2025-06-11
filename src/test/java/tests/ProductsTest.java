@@ -14,7 +14,7 @@ public class ProductsTest extends BaseTest {
     @Step("Применяем сортировку товаров")
     public void sortProductsCheck() {
         SoftAssertions soft = new SoftAssertions();
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         productsPage.open()
                 .isOpened()
                 .sortProductsButton("Z to A");
@@ -39,7 +39,7 @@ public class ProductsTest extends BaseTest {
     @Description("Проверяет, что товары, добавленные на странице продуктов, отображаются в корзине")
     @Step("Добавление товаров в корзину")
     public void checkAddedProducts() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         cartFillStep.openCartWithItems(
                 "Sauce Labs Backpack",
                 "Sauce Labs Onesie",
@@ -54,7 +54,7 @@ public class ProductsTest extends BaseTest {
     @Description("Проверяет, что товары, удаленные на странице продуктов, не отображаются в корзине")
     @Step("Удаление товаров из корзины")
     public void checkRemoveProducts() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         productsPage.open()
                 .isOpened()
                 .addProduct("Sauce Labs Backpack",

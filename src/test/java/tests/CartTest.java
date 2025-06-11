@@ -37,7 +37,7 @@ public class CartTest extends BaseTest {
     @Step("Проверка количества товаров в корзине. Ожидается: 1")
     public void checkRemoveProducts() {
         SoftAssertions soft = new SoftAssertions();
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         cartFillStep.openCartWithItems("Sauce Labs Backpack", "Sauce Labs Bike Light");
         soft.assertThat(cartPage.getCountOfProducts()).isEqualTo(2);
         cartPage.removeProduct("Sauce Labs Backpack");
@@ -52,7 +52,7 @@ public class CartTest extends BaseTest {
     @Description("Проверяет, что количество товаров, добавленных в корзину, отображается корректно")
     @Step("Проверка количества товаров в корзине. Ожидается: 2")
     public void checkNumberAddedProducts() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         cartFillStep.openCartWithItems("Sauce Labs Backpack", "Sauce Labs Bike Light");
         assertThat(cartPage.getCountOfProducts()).isEqualTo(2);
     }
@@ -62,7 +62,7 @@ public class CartTest extends BaseTest {
             "корректно возвращает пользователя на страницу товаров")
     @Step("Нажатие на кнопку 'Continue Shopping'")
     public void checkContinueShoppingButton() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         cartFillStep.openCartWithItems("Sauce Labs Backpack", "Sauce Labs Bike Light");
         cartPage.clickContinueShoppingButton()
                 .isOpened();
@@ -75,7 +75,7 @@ public class CartTest extends BaseTest {
             "корректно перенаправляет на шаг оформления заказа")
     @Step("Нажатие на кнопку 'Checkout'")
     public void verifyCheckoutButton() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         cartFillStep.openCartWithItems("Sauce Labs Backpack", "Sauce Labs Bike Light");
         cartPage.clickCheckoutButton()
                 .isOpened();

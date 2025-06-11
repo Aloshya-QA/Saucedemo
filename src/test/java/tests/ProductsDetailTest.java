@@ -15,7 +15,7 @@ public class ProductsDetailTest extends BaseTest {
             " успешно открывается и отображает форму с деталями.")
     @Step("Открываем страницу товара: 'Test.allTheThings() T-Shirt (Red)'")
     public void checkOpenProductDetailPageSuccess() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         productsDetailPage.open("Test.allTheThings() T-Shirt (Red)")
                 .isOpened();
         assertThat(productsDetailPage.getBackToProductsButtonText())
@@ -27,7 +27,7 @@ public class ProductsDetailTest extends BaseTest {
             " корректно добавляет товар в корзину.")
     @Step("Нажимаем кнопку 'Add to cart' на странице товара")
     public void checkAddToCartButtonFromDetailsPage() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         productsDetailPage.open("Test.allTheThings() T-Shirt (Red)")
                 .isOpened()
                 .clickAddButton();
@@ -43,7 +43,7 @@ public class ProductsDetailTest extends BaseTest {
     @Step("Нажимаем кнопку 'Remove' на странице товара")
     public void checkRemoveButtonFromDetailsPage() {
         SoftAssertions soft = new SoftAssertions();
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         productsDetailPage.open("Test.allTheThings() T-Shirt (Red)")
                 .isOpened()
                 .clickAddButton();
@@ -65,7 +65,7 @@ public class ProductsDetailTest extends BaseTest {
             " возвращает юзера на страницу Products.")
     @Step("Нажимаем кнопку 'Back to products' на странице товара")
     public void checkBackToProductsButtonFromDetailsPage() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         productsDetailPage.open("Test.allTheThings() T-Shirt (Red)")
                 .isOpened()
                 .clickBackToProductsButton()

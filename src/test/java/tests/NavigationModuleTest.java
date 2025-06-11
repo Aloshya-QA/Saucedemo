@@ -13,7 +13,7 @@ public class NavigationModuleTest extends BaseTest{
             " оно успешно открывается")
     @Step("Ожидаем открытия бургер-меню")
     public void checkOpenBurgerMenu() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         navigationModule.burgerMenu()
                 .open()
                 .isOpened();
@@ -25,7 +25,7 @@ public class NavigationModuleTest extends BaseTest{
             " оно закрывается")
     @Step("Ожидаем закрытия бургер-меню")
     public void checkCloseBurgerMenu() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         navigationModule.burgerMenu()
                 .open()
                 .isOpened()
@@ -40,7 +40,7 @@ public class NavigationModuleTest extends BaseTest{
             " происходит логаут")
     @Step("Ожидаем логаут юзера")
     public void checkLogoutButtonFromBurgerMenu() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         navigationModule.burgerMenu()
                 .open()
                 .isOpened()
@@ -55,7 +55,7 @@ public class NavigationModuleTest extends BaseTest{
             " открывается страница товаров")
     @Step("Ожидаем переход на страницу товаров")
     public void checkAllItemsButtonFromBurgerMenu() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         navigationModule.burgerMenu()
                 .open()
                 .isOpened()
@@ -69,7 +69,7 @@ public class NavigationModuleTest extends BaseTest{
     @Description("Проверяет, что при нажатии кнопки 'Cart' открывается корзина")
     @Step("Ожидаем переход в корзину")
     public void checkOpenCart() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         navigationModule.cart()
                 .open()
                 .isOpened();

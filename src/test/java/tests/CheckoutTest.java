@@ -27,7 +27,7 @@ public class CheckoutTest extends BaseTest{
             " Фамилия = {lastName}," +
             " Индекс = {postalCode}")
     public void verifySuccessCheckout(String firstName, String lastName, String postalCode) {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         checkoutPage.open()
                 .isOpened()
                 .enterCheckoutInfo(firstName, lastName, postalCode)
@@ -41,7 +41,7 @@ public class CheckoutTest extends BaseTest{
             " происходит валидация и переход на следующий шаг не выполняется")
     @Step("Попытка ввода пустых значений в форму оформления")
     public void verifyCheckoutWithEmptyFields() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         checkoutPage.open()
                 .isOpened()
                 .enterCheckoutInfo("", "", "")
@@ -55,7 +55,7 @@ public class CheckoutTest extends BaseTest{
             " с пустым полем 'First Name' отображается корректное сообщение об ошибке")
     @Step("Ввод данных с пустым полем 'First Name'")
     public void verifyCheckoutWithEmptyFirstNameField() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         checkoutPage.open()
                 .isOpened()
                 .enterCheckoutInfo("", "Gold", "12345")
@@ -69,7 +69,7 @@ public class CheckoutTest extends BaseTest{
             " с пустым полем 'Last Name' отображается корректное сообщение об ошибке")
     @Step("Ввод данных с пустым полем 'Last Name'")
     public void verifyCheckoutWithEmptyLastNameField() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         checkoutPage.open()
                 .isOpened()
                 .enterCheckoutInfo("Joe", "", "12345")
@@ -83,7 +83,7 @@ public class CheckoutTest extends BaseTest{
             " с пустым полем 'Postal Code' отображается корректное сообщение об ошибке")
     @Step("Ввод данных с пустым полем 'Postal Code'")
     public void verifyCheckoutWithEmptyPostalCodeField() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         checkoutPage.open()
                 .isOpened()
                 .enterCheckoutInfo("Joe", "Gold", "")
@@ -97,7 +97,7 @@ public class CheckoutTest extends BaseTest{
             " с отображаемой на шаге оформления заказа")
     @Step("Сравнение общей суммы товаров в корзине и на странице оформления")
     public void checkProductsTotalPrice() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         productsPage.addProduct("Sauce Labs Backpack", "Sauce Labs Bike Light");
         checkoutPage.open()
                 .isOpened()
@@ -112,7 +112,7 @@ public class CheckoutTest extends BaseTest{
             " рассчитывается корректно от общей стоимости товаров")
     @Step("Проверка корректности расчёта налога: 8% от общей стоимости товаров")
     public void checkTaxPrice() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         productsPage.addProduct("Sauce Labs Backpack", "Sauce Labs Bike Light");
         checkoutPage.open()
                 .isOpened()
@@ -127,7 +127,7 @@ public class CheckoutTest extends BaseTest{
             " на этапе оформления покупки, включая товары и налог.")
     @Step("Проверяем итоговую стоимость заказа")
     public void checkTotalPrice() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         productsPage.addProduct("Sauce Labs Backpack", "Sauce Labs Bike Light");
         checkoutPage.open()
                 .isOpened()
@@ -143,7 +143,7 @@ public class CheckoutTest extends BaseTest{
             " кнопка 'Cancel' возвращает пользователя в корзину.")
     @Step("Нажимаем кнопку 'Cancel' на шаге Checkout Step One")
     public void checkCancelButtonCheckoutStepOne() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         checkoutPage.open()
                 .isOpened()
                 .clickCancelButton()
@@ -157,7 +157,7 @@ public class CheckoutTest extends BaseTest{
             " возвращает пользователя на страницу с товарами.")
     @Step("Нажимаем кнопку 'Cancel' на втором шаге оформления заказа")
     public void checkCancelButtonCheckoutStepTwo() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         checkoutPage.open()
                 .isOpened()
                 .enterCheckoutInfo("Test", "Test", "11111")
@@ -174,7 +174,7 @@ public class CheckoutTest extends BaseTest{
             " завершает процесс и переводит на страницу подтверждения заказа.")
     @Step("Нажимаем кнопку 'Finish' на втором шаге Checkout")
     public void checkFinishButton() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         checkoutStep.completeOrder("Bob", "Marley", "123456");
         assertThat(checkoutPage.getTitle())
                 .isEqualTo("Checkout: Complete!");
@@ -185,7 +185,7 @@ public class CheckoutTest extends BaseTest{
             " возвращает пользователя на страницу с товарами.")
     @Step("Нажимаем кнопку 'Back Home' после завершения заказа")
     public void checkBackHomeButton() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         checkoutStep.completeOrder("Bob", "Marley", "123456");
         checkoutPage.clickBackHomeButton()
                 .isOpened();
