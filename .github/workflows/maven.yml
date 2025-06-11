@@ -9,10 +9,14 @@ on:
   pull_request:
     branches: [ "master" ]
 
+env:
+  USER: ${{secrets.SD_USER}}
+  PASS: ${{secrets.SD_PASSWORD}}
+
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout

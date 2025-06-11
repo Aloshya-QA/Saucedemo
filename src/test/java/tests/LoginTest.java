@@ -20,7 +20,7 @@ public class LoginTest extends BaseTest {
     @TmsLink("TMS")
     @Issue("TMS")
     public void checkSuccessLogin() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         assertThat(productsPage.getTitle())
                 .isEqualTo("Products");
     }
@@ -31,7 +31,7 @@ public class LoginTest extends BaseTest {
     @Step("Пробуем войти с пользователем: standard_user, пустой пароль")
     public void checkLoginWithEmptyPassword() {
         loginPage.open()
-                .login("standard_user", "");
+                .login(user, "");
         assertThat(loginPage.getErrorMessage())
                 .isEqualTo("Epic sadface: Password is required");
     }
@@ -42,7 +42,7 @@ public class LoginTest extends BaseTest {
     @Step("Пробуем войти с пользователем: standard_user, 12314567")
     public void checkLoginWithWrongPassword() {
         loginPage.open()
-                .login("standard_user", "12314567");
+                .login(user, "12314567");
         assertThat(loginPage.getErrorMessage())
                 .isEqualTo("Epic sadface: Username and password" +
                         " do not match any user in this service");
@@ -54,7 +54,7 @@ public class LoginTest extends BaseTest {
     @Step("Пробуем войти с пользователем: standard, secret_sauce")
     public void checkLoginWithWrongUsername() {
         loginPage.open()
-                .login("standard", "secret_sauce");
+                .login("standard", password);
         assertThat(loginPage.getErrorMessage())
                 .isEqualTo("Epic sadface: Username and password" +
                         " do not match any user in this service");

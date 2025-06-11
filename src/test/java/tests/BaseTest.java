@@ -29,6 +29,8 @@ public class BaseTest {
     LoginStep loginStep;
     CheckoutStep checkoutStep;
     CartFillStep cartFillStep;
+    String user = System.getProperty("user");
+    String password = System.getProperty("password");
 
     @Parameters({"browser"})
     @BeforeMethod(alwaysRun = true)
