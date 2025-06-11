@@ -64,6 +64,7 @@ public class BaseTest {
         options.addArguments("--disable-notifications");
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--disable-infobars");
+        options.addArguments("--headless");
         return options;
     }
 
@@ -72,6 +73,9 @@ public class BaseTest {
         if (ITestResult.FAILURE == result.getStatus()) {
             AllureUtils.takeScreenshot(driver);
         }
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
+
     }
 }
