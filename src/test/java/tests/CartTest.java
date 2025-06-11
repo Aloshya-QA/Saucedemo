@@ -14,7 +14,7 @@ public class CartTest extends BaseTest {
     @Step("Проверка названий добавленных товаров. " +
             "Ожидается: 'Sauce Labs Backpack', 'Sauce Labs Bike Light'")
     public void checkAddedProducts() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         cartFillStep.openCartWithItems("Sauce Labs Backpack", "Sauce Labs Bike Light");
         assertThat(cartPage.getProductsName())
                 .contains("Sauce Labs Backpack", "Sauce Labs Bike Light");
@@ -25,7 +25,7 @@ public class CartTest extends BaseTest {
     @Step("Проверка стоимости товара 'Sauce Labs Bike Light'." +
             "Ожидаемая цена: 9.99")
     public void checkAddedProductsPrice() {
-        loginStep.auth("standard_user", "secret_sauce");
+        loginStep.auth(user, password);
         cartFillStep.openCartWithItems("Sauce Labs Backpack", "Sauce Labs Bike Light");
         assertThat(cartPage.getProductPrice("Sauce Labs Bike Light"))
                 .isEqualTo(9.99);
