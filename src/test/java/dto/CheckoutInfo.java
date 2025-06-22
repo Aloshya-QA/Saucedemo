@@ -1,26 +1,17 @@
 package dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+@Builder
 public class CheckoutInfo {
 
-    private final String firstName;
-    private final String lastName;
-    private final String postalCode;
+    private final String
+            firstName,
+            lastName,
+            postalCode;
 
-    public CheckoutInfo(String firstName, String lastName, String postalCode) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.postalCode = postalCode;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
 }
