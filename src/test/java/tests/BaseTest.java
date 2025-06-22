@@ -11,9 +11,11 @@ import steps.CartFillStep;
 import steps.CheckoutStep;
 import steps.LoginStep;
 import utils.AllureUtils;
+import utils.PropertyReader;
 import utils.TestListener;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashMap;
 
 @Listeners(TestListener.class)
@@ -70,6 +72,9 @@ public class BaseTest {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
+        options.addArguments("--disable-blink-features=AutomationControlled");
+        options.setExperimentalOption("excludeSwitches",
+                Collections.singletonList("enable-automation"));
         return options;
     }
 
@@ -81,6 +86,5 @@ public class BaseTest {
         if (driver != null) {
             driver.quit();
         }
-
     }
 }

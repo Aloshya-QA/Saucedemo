@@ -1,9 +1,11 @@
 package wrappers;
 
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+@Log4j2
 public class Button {
 
     WebDriver driver;
@@ -15,6 +17,7 @@ public class Button {
     }
 
     public void click() {
+        log.info("Click {} button", label);
         driver.findElement(By.id(label)).click();
     }
 

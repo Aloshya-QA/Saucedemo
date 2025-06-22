@@ -1,9 +1,11 @@
 package steps;
 
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.WebDriver;
 import pages.CartPage;
 import pages.ProductsPage;
 
+@Log4j2
 public class CartFillStep {
 
     WebDriver driver;
@@ -17,6 +19,7 @@ public class CartFillStep {
     }
 
     public void openCartWithItems(String... productsName) {
+        log.info("Open cart with products: {}", (Object) productsName);
         productsPage.addProduct(productsName);
         cartPage.open()
                 .isOpened();

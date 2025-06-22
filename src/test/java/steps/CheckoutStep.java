@@ -1,8 +1,10 @@
 package steps;
 
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.WebDriver;
 import pages.CheckoutPage;
 
+@Log4j2
 public class CheckoutStep {
 
     WebDriver driver;
@@ -14,6 +16,7 @@ public class CheckoutStep {
     }
 
     public void completeOrder(String firstName, String lastName, String postalCode) {
+        log.info("Successful order with credential: '{}', '{}', '{}'", firstName, lastName, postalCode);
         checkoutPage.open()
                 .enterCheckoutInfo(firstName, lastName, postalCode)
                 .isOpened()
